@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Управление заявками на бронь</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
+        crossorigin="anonymous">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h1 class="mb-4 text-center">Управление заявками на бронь</h1>
+    {% if bookings %}
+      <div class="row">
+        {% for booking in bookings %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Пассажир: {{ booking.passenger.username }}</h5>
+                <p class="card-text"><strong>Мест запрошено:</strong> {{ booking.seats_requested }}</p>
+                <p class="card-text"><strong>Статус:</strong> {{ booking.get_status_display }}</p>
+              </div>
+              {% if booking.status == 'pending' %}
+                <div class="card-footer d-flex justify-content-between">
+                  <a href="{% url 'manage_booking' booking.id 'accept' %}" class="btn btn-success btn-sm">Принять</a>
+                  <a href="{% url 'manage_booking' booking.id 'reject' %}" class="btn btn-danger btn-sm">Отклонить</a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info" role="alert">
+        Нет заявок на бронь.
+      </div>
+    {% endif %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
